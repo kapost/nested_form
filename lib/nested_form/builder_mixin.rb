@@ -56,11 +56,11 @@ module NestedForm
       super(association_name, *(args << block))
     end
 
-    def fields_for_nested_model(name, object, options, block)
-      output = '<div class="fields">'.html_safe
-      output << super
-      output.safe_concat('</div>')
-      output
-    end
+    # def fields_for_nested_model(name, object, options, block)
+    #   output = '<div class="fields">'.html_safe
+    #   output << super
+    #   output.safe_concat('</div>')
+    #   output
+    # end
   end
 end
