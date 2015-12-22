@@ -6,7 +6,7 @@ module NestedForm
     #
     # You can pass HTML options in a hash at the end and a block for the content.
     #
-    #   <%= f.link_to_add(:tasks, :class => "add_task", :href => new_task_path) do %>
+    #   <%= f.link_to_add(:tasks, :class => "add_task", :href => new_task_path, :class_name => 'Task') do %>
     #     Add Task
     #   <% end %>
     #
@@ -20,7 +20,8 @@ module NestedForm
       args << options
       @fields ||= {}
       @template.after_nested_form(association) do
-        model_object = object.class.reflect_on_association(association).klass.new
+        model_class = options[:class_name].try(:constantize) || object.class.reflect_on_association(association).klass
+        model_object = model_class.new
         output = %Q[<script id="#{association}_fields_blueprint" type="text/x-template">].html_safe
         output << fields_for(association, model_object, :child_index => "new_#{association}", &@fields[association])
         output.safe_concat('</script>')
@@ -55,12 +56,5 @@ module NestedForm
       @fields[association_name] = block
       super(association_name, *(args << block))
     end
-
-    # def fields_for_nested_model(name, object, options, block)
-    #   output = '<div class="fields">'.html_safe
-    #   output << super
-    #   output.safe_concat('</div>')
-    #   output
-    # end
   end
 end
